@@ -14,6 +14,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.Result;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +59,8 @@ public class QRcodeFragment extends Fragment {
 
                         String resultString = result.getText().toString();
                         if (resultString.length() !=0){
-                            Log.d("9MarchV1", "Result ==>");
+
+                            Log.d("9MarchV1", "Result ==>" + resultString);
 
 //                            Add Result to  Realtime Service Firebase
                             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -65,6 +69,13 @@ public class QRcodeFragment extends Fragment {
                             Map<String, Object> stringObjectMap = new HashMap<>();
                             stringObjectMap.put("NewsFeed", resultString);
                             databaseReference.updateChildren(stringObjectMap);
+
+//                            Update DateTime and Result to Firebase
+                            Calendar calendar = Calendar.getInstance();
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                            String dateTimeString = dateFormat.format(calendar.getTime());
+
+                            Log.d("9MarchV1", "DataTime ==> " + dateTimeString);
 
                             zXingScannerView.removeAllViews();
                             zXingScannerView.stopCameraPreview();
